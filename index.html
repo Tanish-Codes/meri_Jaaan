@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>From Your Tanish to My Love</title>
+  <style>
+    :root{
+      --bg1:#0f1226;
+      --bg2:#2b1e3a;
+      --accent:#ff6b9f;
+      --muted:#c7c3d6;
+      --radius:18px;
+      font-family: 'Poppins', sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 100%);color:var(--muted);overflow-x:hidden;scroll-behavior:smooth;}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;flex-direction:column;}
+    .card{width:100%;max-width:900px;background:rgba(255,255,255,0.05);backdrop-filter: blur(8px);border-radius:var(--radius);padding:28px;box-shadow: 0 10px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.1);text-align:center;animation:fadeIn 1.5s ease forwards;}
+    h1{margin-bottom:10px;font-size:clamp(22px,4vw,32px);color:#fff;}
+    p.lead{margin:0 auto 30px;color:var(--muted);font-size:clamp(14px,3.5vw,17px);max-width:600px;line-height:1.6;}
+    button{padding:12px 28px;border-radius:16px;background:linear-gradient(90deg,var(--accent),#7aa7ff);border:none;color:white;font-weight:600;cursor:pointer;box-shadow:0 8px 25px rgba(0,0,0,0.4);transition:transform 0.3s, box-shadow 0.3s;}
+    button:hover{transform:scale(1.05);box-shadow:0 10px 30px rgba(0,0,0,0.5);}
+    .music-icon{position:fixed;top:16px;right:16px;font-size:28px;cursor:pointer;color:var(--accent);opacity:0;animation:fadeIn 2s ease forwards;transition:transform 0.3s,filter 0.3s;filter:drop-shadow(0 0 6px var(--accent));z-index:9999;}
+    .music-icon:hover{transform:scale(1.1);}
+    @keyframes fadeIn{to{opacity:1;}}
+    .heart{position:fixed;bottom:-20px;color:var(--accent);animation:floatUp 4s linear infinite;opacity:0.7;}
+    @keyframes floatUp{0%{transform:translateY(0) scale(1);}100%{transform:translateY(-800px) scale(0.3);opacity:0;}}
+    .quote{margin-top:30px;font-style:italic;color:#f9d2e6;animation:fadeIn 2s ease forwards;}
+    .footer{margin-top:40px;color:#aaa;font-size:14px;}
+    @media (max-width:600px){
+      .wrap{padding:16px;}
+      .card{padding:20px;}
+      h1{font-size:22px;}
+      p.lead{font-size:14px;}
+      button{padding:10px 20px;font-size:14px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="music-icon" id="musicIcon">❤️🎵
+    <div>Click here for music</div>
+  </div>
+  <div class="wrap">
+    <div class="card">
+      <h1>To My Love</h1>
+      <p class="lead">Even across the miles, my love wraps around you — warm, gentle, and endless 💖</p>
+      <button id="sendHug">LOVE 🤗 (Click here)</button>
+      <div class="quote" id="quote"></div>
+      <div class="footer">Forever Yours, Tanish 💞</div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop autoplay>
+    <source src="./tera-mera-hai-pyar-amar-ishq-murshid_Q6StxQFP.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const icon = document.getElementById('musicIcon');
+    let playing = true;
+
+    function fadeIn(audio, duration){
+      audio.volume = 0;
+      const step = 0.01 / (duration / 100);
+      const fade = setInterval(()=>{
+        if(audio.volume < 0.6){ audio.volume = Math.min(0.6, audio.volume + step);} else clearInterval(fade);
+      },100);
+    }
+    fadeIn(music, 5000);
+
+    icon.addEventListener('click', ()=>{
+      if(playing){ music.pause(); icon.style.filter='grayscale(1)'; } else { music.play(); icon.style.filter='drop-shadow(0 0 6px var(--accent))'; }
+      playing=!playing;
+    });
+
+    document.getElementById('sendHug').addEventListener('click', ()=>{
+      for(let i=0;i<15;i++){
+        const heart=document.createElement('div');
+        heart.className='heart';
+        heart.style.left=Math.random()*100+'%';
+        heart.style.fontSize=Math.random()*20+20+'px';
+        heart.innerHTML='💖';
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),4000);
+      }
+      const msg=document.createElement('div');
+      msg.textContent='A warm hug is flying to you 💞';
+      msg.style.position='fixed';msg.style.top='25%';msg.style.left='50%';msg.style.transform='translateX(-50%)';msg.style.background='linear-gradient(90deg,var(--accent),#7aa7ff)';msg.style.color='white';msg.style.padding='14px 22px';msg.style.borderRadius='16px';msg.style.fontWeight='600';msg.style.boxShadow='0 6px 18px rgba(0,0,0,0.5)';msg.style.zIndex=9999;
+      document.body.appendChild(msg);
+      setTimeout(()=>{msg.style.transition='opacity 0.8s';msg.style.opacity=0;setTimeout(()=>msg.remove(),1000)},2000);
+    });
+
+    const quotes = [
+      'I may not be there to hold your hand, but I’m always holding your heart. 💞',
+      'Distance only means we have more to look forward to when we finally meet. 💫',
+      'Close your eyes — my love is right beside you. 💕',
+      'Whenever you feel weak, remember you’re my strength too. ❤️',
+      'You are Mine and I am Yours Forever💗🧿'
+    ];
+
+    let index = 0;
+    const quoteEl = document.getElementById('quote');
+    function changeQuote(){
+      quoteEl.textContent = quotes[index];
+      index = (index + 1) % quotes.length;
+    }
+    changeQuote();
+    setInterval(changeQuote, 6000);
+  </script>
+</body>
+</html>
